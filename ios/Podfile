@@ -11,4 +11,6 @@ target 'DigitalDesigns' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Messaging'
 
+  pod 'react-native-async-storage', :path => '../node_modules/@react-native-community/async-storage'
+
 end

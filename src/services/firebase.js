@@ -3,6 +3,7 @@ import firebase from 'react-native-firebase';
 class FirebaseService {
   constructor() {
     this.ref = firebase.firestore().collection('mailbox');
+    this.users = firebase.firestore().collection('user');
     this.auth = firebase.auth();
   }
 
@@ -12,7 +13,7 @@ class FirebaseService {
     } catch (error) {
       try {
         return this.auth.createUserWithEmailAndPassword(email, password);
-      } catch (error) {
+      } catch {
         return null;
       }
     }
@@ -22,17 +23,34 @@ class FirebaseService {
     const doc = await this.ref.doc(id).get();
     if (doc.exists) {
       return doc.data();
-    } else {
-      const defaultDoc = {
-        status: false,
-        date: new Date().toJSON(),
-      };
-      await this.ref.doc(id).set(defaultDoc);
-      return doc;
     }
+
+    const defaultDoc = {
+      status: false,
+      date: new Date().toJSON(),
+    };
+    await this.ref.doc(id).set(defaultDoc);
+    return doc;
   }
 
+  saveUserToken = (device, token) => {
+    const dataToSave = {
+      device,
+      token,
+    };
+    // get the current user
+    return new Promise((resolve, reject) => {
+      // get id for the new document
+      this.users
+        .doc(this.auth.currentUser.email)
+        .set(dataToSave)
+        .then((data) => resolve(data))
+        .catch((error) => reject(error));
+    });
+  };
+
   getData = () => {
+    // console.log(this.auth.currentUser.email);
     return new Promise((resolve, reject) => {
       this.unsubscribe = this.ref
         .orderBy('date', 'DESC')
@@ -60,6 +78,8 @@ class FirebaseService {
   unSubscribe = () => {
     this.unsubscribe();
   };
+
   db = () => this.ref;
 }
+
 export const firebaseService = new FirebaseService();

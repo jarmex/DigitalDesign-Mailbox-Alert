@@ -37,6 +37,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* DigitalDesignsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DigitalDesignsTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		3E456AC4225CC81F00E34DD3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E456AC3225CC81F00E34DD3 /* GoogleService-Info.plist */; };
+		3EAC660E22612CBB000CC0B8 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EAC660A22612C9A000CC0B8 /* libRNCAsyncStorage.a */; };
 		3EE79537225E5C6D004F8759 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE7950E225E5C6D004F8759 /* UserNotifications.framework */; };
 		6BB92880385E43F3B8D5B643 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A710962AF6754312AAFE294E /* libRNFirebase.a */; };
 		71E26C24DD0647E3A8DEA86B /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08AA5AE3CB114B2AA22B3C8E /* libRNGestureHandler.a */; };
@@ -308,6 +309,13 @@
 			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
 			remoteInfo = "RNGestureHandler-tvOS";
 		};
+		3EAC660922612C9A000CC0B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EAC65DE22612C9A000CC0B8 /* RNCAsyncStorage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNCAsyncStorage;
+		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -370,6 +378,7 @@
 		2D02E4901E0B4A5D006451C7 /* DigitalDesigns-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DigitalDesigns-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E456AC3225CC81F00E34DD3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3EAC65DE22612C9A000CC0B8 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		3EE794FF225E5B5C004F8759 /* DigitalDesigns.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = DigitalDesigns.entitlements; path = DigitalDesigns/DigitalDesigns.entitlements; sourceTree = "<group>"; };
 		3EE7950E225E5C6D004F8759 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -414,6 +423,7 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				3EAC660E22612CBB000CC0B8 /* libRNCAsyncStorage.a in Frameworks */,
 				71E26C24DD0647E3A8DEA86B /* libRNGestureHandler.a in Frameworks */,
 				F944C4743E9057B1BAFF4666 /* libPods-DigitalDesigns.a in Frameworks */,
 				6BB92880385E43F3B8D5B643 /* libRNFirebase.a in Frameworks */,
@@ -612,6 +622,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3EAC65DF22612C9A000CC0B8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3EAC660A22612C9A000CC0B8 /* libRNCAsyncStorage.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		40EDEC254205A080A60EB0B6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -642,6 +660,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3EAC65DE22612C9A000CC0B8 /* RNCAsyncStorage.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -878,6 +897,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 3EAC65DF22612C9A000CC0B8 /* Products */;
+					ProjectRef = 3EAC65DE22612C9A000CC0B8 /* RNCAsyncStorage.xcodeproj */;
 				},
 				{
 					ProductGroup = 3E13A7FB225D1B4000175EBB /* Products */;
@@ -1142,6 +1165,13 @@
 			fileType = archive.ar;
 			path = "libRNGestureHandler-tvOS.a";
 			remoteRef = 3E456AC1225CC66900E34DD3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3EAC660A22612C9A000CC0B8 /* libRNCAsyncStorage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCAsyncStorage.a;
+			remoteRef = 3EAC660922612C9A000CC0B8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { firebaseService } from '../../services/firebase';
+import { firebaseService } from '../services/firebase';
 
-export const useFirebase = () => {
+const useFirebase = () => {
   const [data, setData] = useState([]);
-  const [pending, setPending] = useState(
-    'Hooray!!!!\n\n All letters are picked up.',
-  );
+  const [pending, setPending] = useState({
+    message: 'Hooray!!!!\n\n All letters are picked up.',
+  });
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,13 +16,14 @@ export const useFirebase = () => {
       .then(({ maildata, pending: pd }) => {
         setData(maildata);
         if (pd) {
-          setPending(
-            `You have letters to pick up.....\n\n${moment(pd.date).fromNow()}`,
-          );
+          setPending({
+            message: 'You have letters to pick up.....',
+            datemsg: moment(pd.date).fromNow(),
+          });
         }
         setLoading(false);
       })
-      .catch((error) => setLoading(false));
+      .catch(() => setLoading(false));
     return () => {
       firebaseService.unSubscribe();
     };
@@ -29,3 +31,5 @@ export const useFirebase = () => {
 
   return [data, loading, pending];
 };
+
+export default useFirebase;

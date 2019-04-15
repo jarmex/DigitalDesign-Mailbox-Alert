@@ -5,9 +5,10 @@ import {
   MessageViewBorder,
   Container,
   FormatMessage,
+  DateMessage,
 } from './styl';
 import HistoryResult from './HistoryResult';
-import { useFirebase } from './useFirebase';
+import { useFirebase } from '../../hooks';
 
 const CheckResultPage = () => {
   const [data, loading, pending] = useFirebase();
@@ -23,7 +24,8 @@ const CheckResultPage = () => {
     <Container>
       <MessageViewContainer>
         <MessageViewBorder>
-          <FormatMessage>{pending}</FormatMessage>
+          <FormatMessage>{pending.message}</FormatMessage>
+          {pending.datemsg && <DateMessage>{pending.datemsg}</DateMessage>}
         </MessageViewBorder>
       </MessageViewContainer>
       <HistoryResult data={data} loading={loading} />
