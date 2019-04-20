@@ -4,18 +4,22 @@ import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
 import { firebaseService } from '../services/firebase';
 
+const updateToken = async (fcmToken) => {
+  if (fcmToken) {
+    try {
+      await firebaseService.saveUserToken('iPhone', fcmToken);
+      await AsyncStorage.setItem('fcmToken', fcmToken);
+    } catch {
+      //
+    }
+  }
+};
+
 const getToken = async () => {
   let fcmToken = await AsyncStorage.getItem('fcmToken');
   if (!fcmToken) {
     fcmToken = await firebase.messaging().getToken();
-    if (fcmToken) {
-      try {
-        await firebaseService.saveUserToken('iPhone', fcmToken);
-        await AsyncStorage.setItem('fcmToken', fcmToken);
-      } catch {
-        //
-      }
-    }
+    await updateToken(fcmToken);
   }
   return fcmToken;
 };
@@ -42,6 +46,13 @@ const useMessaging = () => {
       }
     };
     checkPermission();
+    const onTokenRefreshListener = firebase.messaging().onTokenRefresh((fcmToken) => {
+      // Process your token as required
+      updateToken(fcmToken);
+    });
+    return () => {
+      onTokenRefreshListener();
+    };
   }, []);
 
   const [notify, setNotification] = useState(null);
@@ -61,32 +72,38 @@ const useMessaging = () => {
      * Triggered when a particular notification has been received in foreground
      * In this situation, it is up to you to decide if the notification should be shown.
      * */
-    const notificationListener = firebase.notifications().onNotification((notification) => {
-      // const { title, body } = notification;
-      // setNotification(notification);
-      // Presents the notification
-      const localNotifiation = new firebase.notifications.Notification()
-        .setNotificationId(notification.notificationId)
-        .setTitle(notification.title)
-        .setSubtitle(notification.subtitle)
-        .setBody(notification.body)
-        .setData(notification.data)
-        .ios.setBadge(notification.ios.badge);
-      firebase
-        .notifications()
-        .displayNotification(localNotifiation)
-        .catch((err) => console.error(err));
-    });
+    let notificationListener;
+    if (Platform.OS === 'ios') {
+      notificationListener = firebase.notifications().onNotification((notification) => {
+        // const { title, body } = notification;
+        // setNotification(notification);
+        // Presents the notification
+        const localNotifiation = new firebase.notifications.Notification()
+          .setNotificationId(notification.notificationId)
+          .setTitle(notification.title)
+          .setSubtitle(notification.subtitle)
+          .setBody(notification.body)
+          .setData(notification.data)
+          .ios.setBadge(notification.ios.badge);
+        firebase
+          .notifications()
+          .displayNotification(localNotifiation)
+          .catch((err) => console.error(err));
+      });
+    }
 
     /*
      * If your app is in background, you can listen for when a notification
      * is clicked / tapped / opened as follows:
      * */
-    const notificationOpenedListener = firebase
-      .notifications()
-      .onNotificationOpened((notificationOpen) => {
-        setNotification(notificationOpen.notification);
-      });
+    let notificationOpenedListener;
+    if (Platform.OS === 'ios') {
+      notificationOpenedListener = firebase
+        .notifications()
+        .onNotificationOpened((notificationOpen) => {
+          setNotification(notificationOpen.notification);
+        });
+    }
 
     let unsubDisplayLister;
     // iOS specific code
@@ -96,13 +113,29 @@ const useMessaging = () => {
         setNotification(notification);
       });
     }
+
+    let messageListener;
+
+    if (Platform.OS === 'android') {
+      this.messageListener = firebase.messaging().onMessage((message) => {
+        // Process your message as required
+        setNotification(message);
+      });
+    }
     checkBkNotications();
 
     return () => {
-      notificationListener();
-      notificationOpenedListener();
+      if (notificationListener) {
+        notificationListener();
+      }
+      if (notificationOpenedListener) {
+        notificationOpenedListener();
+      }
       if (unsubDisplayLister) {
         unsubDisplayLister();
+      }
+      if (messageListener) {
+        messageListener();
       }
     };
   }, []);
