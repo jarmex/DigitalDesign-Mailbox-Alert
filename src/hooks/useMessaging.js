@@ -7,7 +7,8 @@ import { firebaseService } from '../services/firebase';
 const updateToken = async (fcmToken) => {
   if (fcmToken) {
     try {
-      await firebaseService.saveUserToken('iPhone', fcmToken);
+      const phonetype = Platform.OS;
+      await firebaseService.saveUserToken(phonetype, fcmToken);
       await AsyncStorage.setItem('fcmToken', fcmToken);
     } catch {
       //
@@ -41,7 +42,7 @@ const useMessaging = () => {
           const tk = await getToken();
           setToken(tk);
         } catch (error) {
-          console.log('permission rejected');
+          console.log('permission rejected'); // eslint-disable-line
         }
       }
     };
@@ -72,50 +73,41 @@ const useMessaging = () => {
      * Triggered when a particular notification has been received in foreground
      * In this situation, it is up to you to decide if the notification should be shown.
      * */
-    let notificationListener;
-    if (Platform.OS === 'ios') {
-      notificationListener = firebase.notifications().onNotification((notification) => {
-        // const { title, body } = notification;
-        // setNotification(notification);
-        // Presents the notification
-        const localNotifiation = new firebase.notifications.Notification()
-          .setNotificationId(notification.notificationId)
-          .setTitle(notification.title)
-          .setSubtitle(notification.subtitle)
-          .setBody(notification.body)
-          .setData(notification.data)
-          .ios.setBadge(notification.ios.badge);
-        firebase
-          .notifications()
-          .displayNotification(localNotifiation)
-          .catch((err) => console.error(err));
-      });
-    }
+
+    const notificationListener = firebase.notifications().onNotification((notification) => {
+      // const { title, body } = notification;
+      // setNotification(notification);
+      // Presents the notification
+      const localNotifiation = new firebase.notifications.Notification()
+        .setNotificationId(notification.notificationId)
+        .setTitle(notification.title)
+        .setSubtitle(notification.subtitle)
+        .setBody(notification.body)
+        .setData(notification.data)
+        .ios.setBadge(notification.ios.badge);
+
+      firebase
+        .notifications()
+        .displayNotification(localNotifiation)
+        .catch((err) => console.error(err));
+    });
 
     /*
      * If your app is in background, you can listen for when a notification
      * is clicked / tapped / opened as follows:
      * */
-    let notificationOpenedListener;
-    if (Platform.OS === 'ios') {
-      notificationOpenedListener = firebase
-        .notifications()
-        .onNotificationOpened((notificationOpen) => {
-          setNotification(notificationOpen.notification);
-        });
-    }
-
-    let unsubDisplayLister;
-    // iOS specific code
-    if (Platform.OS === 'ios') {
-      // The firebase onNotificationDisplayed is called when the notification is shown
-      unsubDisplayLister = firebase.notifications().onNotificationDisplayed((notification) => {
-        setNotification(notification);
+    const notificationOpenedListener = firebase
+      .notifications()
+      .onNotificationOpened((notificationOpen) => {
+        setNotification(notificationOpen.notification);
       });
-    }
+
+    // The firebase onNotificationDisplayed is called when the notification is shown
+    const unsubDisplayLister = firebase.notifications().onNotificationDisplayed((notification) => {
+      setNotification(notification);
+    });
 
     let messageListener;
-
     if (Platform.OS === 'android') {
       this.messageListener = firebase.messaging().onMessage((message) => {
         // Process your message as required
